@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "64989015337",
+    "project_id": "naari-rakshak-59d22",
+    "storage_bucket": "naari-rakshak-59d22.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64989015337:android:4b4373393dff1b6a4e5b38",
+        "android_client_info": {
+          "package_name": "com.blogspot.softwareengineerrohan.naarirakshak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64989015337-clitus6if3lmrdjfpsnregir4up4n0in.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blogspot.softwareengineerrohan.naarirakshak",
+            "certificate_hash": "ebcf2bb107f2954e1af57d88b104a3b6efe5b723"
+          }
+        },
+        {
+          "client_id": "64989015337-al8gg6knf4gg15jjrhpljm6jujsfpruo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAnb8XnWZ18xCdh6JEe7Eq7zB8XjVq2Kk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64989015337-al8gg6knf4gg15jjrhpljm6jujsfpruo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

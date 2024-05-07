@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivities.SignupFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/secure" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Sign up your account"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_bg"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:ems="10"
+            android:hint="Full name
+"
+            android:inputType="textPersonName"
+            android:paddingLeft="5dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_bg"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="5dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_bg"
+            android:drawableLeft="@drawable/baseline_lock_24"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingLeft="5dp" />
+
+        <Button
+            android:id="@+id/signupBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/pink"
+            android:text="Sign up"
+            android:textAllCaps="true" />
+
+
+
+    </LinearLayout>
+</FrameLayout>

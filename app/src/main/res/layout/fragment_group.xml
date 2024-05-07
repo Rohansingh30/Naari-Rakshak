@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    tools:context=".Ui.Activities.Fragments.GroupFragment">
+
+    <Button
+        android:id="@+id/add_guardian_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/greeen"
+        android:text="Add Guardian" />
+
+    <TextView
+        android:id="@+id/ccccc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Saved Contact" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

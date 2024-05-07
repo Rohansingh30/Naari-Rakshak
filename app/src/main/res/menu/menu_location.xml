@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<item
+android:id="@+id/police"
+android:enabled="true"
+    app:showAsAction="ifRoom"
+    android:icon="@drawable/police_icon"
+    android:title="Police" />
+
+    <item
+        android:id="@+id/ambulance"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="amulance" />
+    <item
+        android:id="@+id/fire"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Fire" />
+    <item
+        android:id="@+id/call"
+        android:enabled="true"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_call_24"
+        android:title="Call" />
+
+
+</menu>

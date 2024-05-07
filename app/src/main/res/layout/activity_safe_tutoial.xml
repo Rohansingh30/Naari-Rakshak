@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Ui.Activities.activity.SafeTutoialActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="31dp"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="@string/tips"
+            android:textColor="#000000"
+            android:textSize="26sp" />
+
+        <at.blogc.android.views.ExpandableTextView
+            android:id="@+id/exTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/tips1"
+            android:textSize="20sp"
+            app:animation_duration="750" />
+
+        <TextView
+            android:id="@+id/seeMoreTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="See more" />
+
+        <at.blogc.android.views.ExpandableTextView
+            android:id="@+id/exTv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="@string/tips2"
+            android:textSize="20sp"
+            app:animation_duration="750" />
+
+        <TextView
+            android:id="@+id/seeMoreTv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="See more" />
+
+    </LinearLayout>
+
+</LinearLayout>

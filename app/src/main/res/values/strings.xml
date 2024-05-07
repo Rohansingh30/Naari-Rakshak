@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Naari Rakshak</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sos">SOS</string>
+    <string name="community">Community</string>
+    <string name="location">Location</string>
+    <string name="home">Home</string>
+
+    <string name="default_web_client_id">1040539193734-invvjo4rg2otauqra2loor010j7lghkb.apps.googleusercontent.com</string>
+
+    <string name="nav_open">Close Navigation Drawer</string>
+    <string name="nav_close">Open navigation Drawer</string>
+
+    <string name="open">Open\n</string>
+    <string name="close">Close\n</string>
+    <string name="tips2">
+        <b>
+        \t How can I stay safe late at night? </b>\n
+1:\tSafety in numbers. Always stay within a group when possible.\n
+2:\tArrange a lift or get taxis if you can.\n
+3:\tAlways book your taxi.\n
+4:\tDrink in moderation and watch your drink.\n
+5:S\ttay in well-lit areas.\n
+6:\tKeep valuables hidden.\n
+7:\tKeep away from hostile situations.\n
+    </string>
+    <string name="tips1">
+        <b> \t How can i safe alone at Home? </b>\n
+        1:\tLock all doors and windows.\n
+2:\tTurn on outdoor lights in the evening.\n
+3:\tKeep blinds closed at night.\n
+4:\tRetrieve mail during the day.\n
+5:\tCheck your peephole before opening the door for visitors.\n
+6:\tGet your keys ready before approaching your door.\n
+7:\tCarry pepper spray or an alarm.\n</string>
+    <string name="tips">Tips For Women on Staying safe!</string>
+
+    <string name="All_Tips"> <b>1:\tBe Alert! Scan the area as you walk.\n
+2:\tAvoid shopping alone.\n 3:\tTry to shop with a friend or relative.\n
+4:\tKnow your surroundings.\n
+5:\tCarry your purse close to your body and do not leave \t unattended.\n
+6:\tTry not to carry too many packages.</b></string>
+    <string name="welcome">we glad to too see you again\n
+        Login to your account below</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+
+</resources>
