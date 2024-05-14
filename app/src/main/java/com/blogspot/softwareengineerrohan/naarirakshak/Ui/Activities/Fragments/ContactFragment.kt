@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.softwareengineerrohan.naarirakshak.R
 //import com.blogspot.softwareengineerrohan.naarirakshak.FragmentsAdapters.ContactaAdapter
 import com.blogspot.softwareengineerrohan.naarirakshak.databinding.FragmentContactBinding
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.ai.client.generativeai.GenerativeModel
 //import com.blogspot.softwareengineerrohan.naarirakshak.roomdb.NaariRakshakDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +58,17 @@ class ContactFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize the ShimmerFrameLayout
+
+        val shimmerEffect= binding.shimmerLayout
+
+// Start the shimmer animation
+        shimmerEffect.startShimmer()
+
+// Stop the shimmer animation when data is loaded
+// ...
+
+        shimmerEffect.stopShimmer()
 
 
         val etPrompt = binding.root.findViewById<EditText>(R.id.etPromt)
@@ -75,19 +87,33 @@ class ContactFragment : Fragment() {
         }
 
         binding.btnSearch.setOnClickListener {
-            Toast.makeText(requireContext(), "Please wait...", Toast.LENGTH_SHORT).show()
             val prompt = etPrompt.text.toString()
 
             val generativeModel = GenerativeModel(
                 modelName = "gemini-pro",
                 apiKey = "AIzaSyB0g76J-LcZPuOp8UniskYQDWUm5wjwPWM"
             )
+            //show shimmer effect when data is loading
+                        Toast.makeText(requireContext(), "Please wait...", Toast.LENGTH_SHORT).show()
+
+            binding.shimmerLayout.visibility = View.VISIBLE
+            binding.shimmerLayout.startShimmer()
+
+
             runBlocking {
                 GlobalScope.launch(Dispatchers.IO) {
                     try {
                         val result = generativeModel.generateContent(prompt)
                         withContext(Dispatchers.Main) {
                             tvResult.text = result.text
+                            binding.shimmerLayout.stopShimmer()
+                            binding.shimmerLayout.visibility = View.GONE
+                            Toast.makeText(
+                                requireContext(),
+                                "Success",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.tvResult.visibility = View.VISIBLE
                         }
                     }catch (e : Exception){
                         withContext(Dispatchers.Main) {
@@ -101,9 +127,17 @@ class ContactFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
 
+
+
+
+
+
+        }
+
+
+
+    }
 
 
 //        binding.tvv.setOnClickListener {

@@ -1,8 +1,12 @@
 package com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.HeaderFragments
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +15,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.blogspot.softwareengineerrohan.naarirakshak.R
 import com.blogspot.softwareengineerrohan.naarirakshak.SharedPreferernences.PrefConstants
 import com.blogspot.softwareengineerrohan.naarirakshak.SharedPreferernences.SharedPref
@@ -47,6 +53,8 @@ class SettingFragment : Fragment() {
     @SuppressLint("MissingInflatedId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
 
 

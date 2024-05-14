@@ -102,7 +102,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
+                        android:layout_margin="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent">
@@ -122,7 +122,7 @@
                             android:id="@+id/shareTitless"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Get safe home"
+                            android:text="Share location"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +155,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
+                        android:layout_margin="8dp"
                         tools:layout_editor_absoluteX="0dp"
                         tools:layout_editor_absoluteY="6dp">
 
@@ -164,7 +164,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Share live location to saved contacts"
+                            android:text="Check your safety tips"
                             android:textColor="#554F4F"
                             app:layout_constraintEnd_toStartOf="@+id/shareImage"
                             app:layout_constraintStart_toStartOf="parent"
@@ -190,7 +190,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/shareDesp"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:srcCompat="@drawable/home" />
+                            app:srcCompat="@drawable/safety" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

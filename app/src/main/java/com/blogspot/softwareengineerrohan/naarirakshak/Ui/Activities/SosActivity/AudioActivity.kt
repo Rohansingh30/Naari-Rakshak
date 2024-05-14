@@ -8,16 +8,19 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.blogspot.softwareengineerrohan.naarirakshak.R
+import androidx.core.net.toUri
+import androidx.recyclerview.widget.GridLayoutManager
+import com.blogspot.softwareengineerrohan.naarirakshak.Adapters.FragmentsAdapters.fragmentsAdapters.RcvAudioUploadAdapter
+import com.blogspot.softwareengineerrohan.naarirakshak.Adapters.FragmentsAdapters.fragmentsAdapters.RcvVideoUploadAdapter
+import com.blogspot.softwareengineerrohan.naarirakshak.Models.FragmentsModels.fragmnetsmodels.RcvAudioUploadModel
 import com.blogspot.softwareengineerrohan.naarirakshak.databinding.ActivityAudioBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 
 class AudioActivity : AppCompatActivity() {
@@ -34,11 +37,14 @@ class AudioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        binding.NwButton.setOnClickListener {
+            uploadAud()
+        }
 
         if (isMicrophoneAvailable()) {
             getMicrophonePermission()
         }
-
+        getAud()
 
     }
     fun startAudio(view: View) {
@@ -87,28 +93,37 @@ class AudioActivity : AppCompatActivity() {
 
 
     }
-    private fun uploadMusicToFirebase(){
-        val db = FirebaseFirestore.getInstance()
+private fun getAud(){
+ //    get audio from firebase cloud storage
+    val storageRef = FirebaseStorage.getInstance().reference.child("audios")
+storageRef.listAll().addOnSuccessListener { listResult ->
+    val audios = ArrayList<RcvAudioUploadModel>()
+    for (item in listResult.items) {
+        audios.add(RcvAudioUploadModel(item.name))
+        binding.rcvAudioSos.layoutManager = GridLayoutManager(this, 3)
+        binding.rcvAudioSos.adapter = RcvAudioUploadAdapter(this, audios)
 
-        val myVoice = getRecordingFilePath()
+        }
 
-
-                        val currentUser = FirebaseAuth.getInstance().currentUser
-                        val email = currentUser?.email.toString()
-
-                        val myRecordings = hashMapOf(
-                            "recording" to myVoice
-
-                        )
-
-
-                        db.collection("users")
-                            .document(email)
-                            .set(myRecordings)
-                            .addOnCompleteListener {
-                                Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show()
-                            }
     }
+}
+
+    private fun uploadAud(){
+        val storageRef = FirebaseStorage.getInstance().reference.child("audios" + System.currentTimeMillis() + ".mp3")
+        val audioFile = File(getRecordingFilePath())
+        val audioUri = audioFile.toUri()
+        val uploadTask = storageRef.child(audioFile.name).putFile(audioUri)
+        uploadTask.addOnSuccessListener {
+            Firebase.database.reference.child("audios").push().setValue(it.toString())
+
+            Toast.makeText(this, "Uploaded", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
 
     private fun isMicrophoneAvailable(): Boolean {
         if (this.packageManager.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
@@ -141,8 +156,5 @@ class AudioActivity : AppCompatActivity() {
         return file.path
     }
 
-    fun uploadRec(view: View) {
-        uploadMusicToFirebase()
-    }
 
 }

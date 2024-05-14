@@ -22,8 +22,10 @@ import android.os.Vibrator
 import android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
 import android.telephony.SmsManager
 import android.util.Log
+import android.view.GestureDetector
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -36,6 +38,7 @@ import androidx.fragment.app.Fragment
 import com.blogspot.softwareengineerrohan.naarirakshak.R
 import com.blogspot.softwareengineerrohan.naarirakshak.SharedPreferernences.PrefConstants
 import com.blogspot.softwareengineerrohan.naarirakshak.SharedPreferernences.SharedPref
+import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.AppScreenInfo.AppInfoActivity
 import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.Fragments.ContactFragment
 import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.Fragments.GroupFragment
 import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.Fragments.HomeFragment
@@ -162,9 +165,16 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+
+
+
         binding.fabSosBtn.setOnClickListener {
 
             replaceFragment(SosFragment())
+            // Handle single click event
+
+            // Pass the touch event to the GestureDetector
+
 
         }
         binding.fabSosBtn.setOnLongClickListener {
@@ -173,6 +183,7 @@ class MainActivity : AppCompatActivity() {
             return@setOnLongClickListener true
 
         }
+
 
 
         binding.bottomBar.background = null
@@ -213,13 +224,12 @@ class MainActivity : AppCompatActivity() {
         binding.NavViews.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.headerSignOut -> {
-                    signouts()
-
+signouts()
 
                 }
 
                 R.id.header_announcements -> {
-                    Toast.makeText(applicationContext, "Announcements", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
 
                 }
 
@@ -229,18 +239,29 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-                R.id.header_setting -> {
+                R.id.header_profile -> {
+                    replaceFragment(SettingFragment())
                     Toast.makeText(applicationContext, "Profile", Toast.LENGTH_SHORT)
                         .show()
-                    replaceFragment(SettingFragment())
 
 
                 }
+                R.id.header_FAQs -> {
+                    Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
+                }
+                R.id.header_owner_Details -> {
+                    startActivity(Intent(this, AppInfoActivity::class.java))
+//                    Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
+                }
+                R.id.header_share -> {
+                    Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
+                }
 
 
-                R.id.headerInvite -> {
+
+                R.id.header_Invite -> {
 //                    replaceFragment(InviteFragment())
-                    Toast.makeText(applicationContext, "Invite Clicked", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_SHORT).show()
 
                 }
 
@@ -252,7 +273,7 @@ class MainActivity : AppCompatActivity() {
         //shake features implementation
 
         mediaPlayer = MediaPlayer.create(this, R.raw.militaryalarm)
-        mediaPlayer.setVolume(1f, 1f)
+        mediaPlayer.setVolume(10f, 10f)
         mediaPlayer.isLooping = true
 
 
@@ -262,6 +283,11 @@ class MainActivity : AppCompatActivity() {
         registerListener()
 
     }
+
+
+    // Create a GestureDetector object
+
+
 
     private fun registerListener() {
         // Registering the Listener
@@ -306,10 +332,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun emergencySystems() {
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(3000, 10))
+        }else{
+
+            vibrator.vibrate(3000)
+
+        }
+
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Emergency System")
+        alertDialog.setMessage("Do you want to activate emergency system?")
+        alertDialog.setPositiveButton("Yes") { _, _ ->
+            // Handle the positive button click
+
+
+            activateEmergencySystem()
+
+        }
+
+        alertDialog.setNeutralButton("Cancel") { _, _ ->
+            // Handle the neutral button click
+
+
+        }
+        alertDialog.show()
+    }
+    private fun activateEmergencySystem() {
+
         // Emergency system activated
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500, 10))
+            vibrator.vibrate(VibrationEffect.createOneShot(5000, 10))
 
             Toast.makeText(applicationContext, "Emergency System Activated", Toast.LENGTH_SHORT).show()
 
@@ -323,7 +378,7 @@ class MainActivity : AppCompatActivity() {
 
 
         } else {
-            vibrator.vibrate(500)
+            vibrator.vibrate(5000)
 //            Toast.makeText(this, "Playing alarm!", Toast.LENGTH_SHORT).show()
 
             mediaPlayer.start()
@@ -338,7 +393,7 @@ class MainActivity : AppCompatActivity() {
 
 
 fun getUserLocationsByFused(contact: Contact){
-    Toast.makeText(this, "Sending sos alerts to save contacts!", Toast.LENGTH_SHORT).show()
+    Toast.makeText(this, "Sending sos alerts to saved contacts!", Toast.LENGTH_SHORT).show()
 
     // Location Request
     val locationRequest = LocationRequest.create().apply {
@@ -644,8 +699,23 @@ fun getUserLocationsByFused(contact: Contact){
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
+            R.id.Homess -> {
+            replaceFragment(HomeFragment())
+
+            }
+
+
             R.id.naariRakshak -> {
-                Toast.makeText(this, "Naari Rakshak", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, AppInfoActivity::class.java))
+            }
+
+            R.id.Logoutess -> {
+                signouts()
+
+            }
+            R.id.profiless -> {
+                replaceFragment(SettingFragment())
+
             }
 
         }

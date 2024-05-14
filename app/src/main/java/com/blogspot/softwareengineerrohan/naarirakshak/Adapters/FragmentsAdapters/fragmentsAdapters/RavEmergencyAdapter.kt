@@ -40,10 +40,7 @@ class RavEmergencyAdapter(val context : Context, private val emergencyItems : Ar
             when (position) {
                 0 -> {
 
-
-
-
-                    val intent = Intent(Intent.ACTION_DIAL)
+                    val intent = Intent(Intent.ACTION_CALL)
                     intent.data = Uri.parse("tel:112")
                     context.startActivity(intent)
 

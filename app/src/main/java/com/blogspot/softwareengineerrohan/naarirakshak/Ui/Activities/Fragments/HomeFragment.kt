@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat.Action
 import androidx.fragment.app.viewModels
@@ -48,11 +49,10 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
-private lateinit var db : FirebaseFirestore
-private lateinit var mAuth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+    private lateinit var mAuth: FirebaseAuth
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    val viewModel : ContactViewModel by viewModels()
-
+    val viewModel: ContactViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -73,11 +73,31 @@ private lateinit var mAuth: FirebaseAuth
         var db = FirebaseFirestore.getInstance()
 
 
-
         val dataList = ArrayList<RavEmergencyItem>()
-        dataList.add(RavEmergencyItem(R.drawable.baseline_gpp_good_24, "Police", "Call 122 for emergencies", "122"))
-        dataList.add(RavEmergencyItem(R.drawable.baseline_health_and_safety_24, "Ambulance", "Call 102 for ambulance", "108"))
-        dataList.add(RavEmergencyItem(R.drawable.baseline_fire_truck_24, "Fire Brigade", "Call 101 for fire brigade ", "101"))
+        dataList.add(
+            RavEmergencyItem(
+                R.drawable.baseline_gpp_good_24,
+                "Police",
+                "Call 122 for emergencies",
+                "122"
+            )
+        )
+        dataList.add(
+            RavEmergencyItem(
+                R.drawable.baseline_health_and_safety_24,
+                "Ambulance",
+                "Call 102 for ambulance",
+                "108"
+            )
+        )
+        dataList.add(
+            RavEmergencyItem(
+                R.drawable.baseline_fire_truck_24,
+                "Fire Brigade",
+                "Call 101 for fire brigade ",
+                "101"
+            )
+        )
 
 
         binding.ravEmergency.adapter = RavEmergencyAdapter(requireContext(), dataList)
@@ -87,8 +107,10 @@ private lateinit var mAuth: FirebaseAuth
         exploreList.add(ExploreModel(R.drawable.baseline_local_hospital_24, "Hospital"))
         exploreList.add(ExploreModel(R.drawable.baseline_local_pharmacy_24, "Pharmacies"))
         exploreList.add(ExploreModel(R.drawable.baseline_fire_truck_24, "Ambulance"))
-        binding.ravEmergency.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.ravExplore.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.ravEmergency.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.ravExplore.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.ravExplore.adapter = ExploreAdapter(requireContext(), exploreList)
 
 //        val shareLocation = ArrayList<RavShareLocationModel>()
@@ -99,119 +121,149 @@ private lateinit var mAuth: FirebaseAuth
 //        binding.ravShareLocation.adapter = ShareLocationAdapter(requireContext(), shareLocation)
 //
 
+
         binding.apply {
             cardViewTutorial.setOnClickListener {
                 startActivity(Intent(context, SafeTutoialActivity::class.java))
             }
             cardViewSafe.setOnClickListener {
-
-
-                initFusedLocationProviderClient()
-                viewModel.getAllContacts().observe(requireActivity()) {
-                    for (i in it) {
-                        getUserLocation(i)
-                    }
-                }
-                setUpLocationListener()
-
-
+                shareLocationPeriodically()
+//                Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+//
+//                initFusedLocationProviderClient()
+//                viewModel.getAllContacts().observe(requireActivity()) {
+//                    for (i in it) {
+//                        getUserLocation(i)
+//                    }
+//                }
+//                setUpLocationListener()
+//
 
 
             }
 
 
-
-
         }
-
-
-
-
-
-
-
-
-
 
 
     }
 
-    private fun setUpLocationListener() {
+    private fun shareLocationPeriodically() {
         viewModel.getAllContacts().observe(requireActivity()) {
             if (it.isEmpty()) {
 
                 val intent = Intent(context, AddContactActivity::class.java)
                 startActivity(intent)
-            }
+                Toast.makeText(context, "Please Add Contacts", Toast.LENGTH_SHORT).show()
+            } else {
 
 
-        }
-
-
-    }
-
-
-
-    private fun initFusedLocationProviderClient() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-    }
-    private fun getUserLocation(contact: Contact) {
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                1
-
-            )
-            return
-        }
-
-        else {
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                if (it != null) {
-//it show my location on google map
-//                    val latitude = it.latitude
-//                    val longitude = it.longitude
-//                    val intent = Intent(Intent.ACTION_VIEW)
-//                    intent.data = Uri.parse("geo:$latitude,$longitude")
-//                    startActivity(intent)
-
-//it send my location of google map to share by intent
-//                    val uri = "https://www.google.com/maps/?q=${it.latitude},${it.longitude}"
-//                    val sharingIntent = Intent(Intent.ACTION_SENDTO)
-//                    sharingIntent.type = "text/plain"
-//                    sharingIntent.putExtra(Intent.EXTRA_TEXT, uri)
-//                    startActivity(Intent.createChooser(sharingIntent, "Share in..."))
-
-//                    get room data to list
-
-
-// this code best for send location with msg to contact numbers
-                    val uri = "https://www.google.com/maps/?q=${it.latitude},${it.longitude}"
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    val phoneNumber = arrayListOf<String>("${contact.number}")
-                    intent.data = Uri.parse("sms:$phoneNumber")
-                    intent.putExtra("sms_body", "I am in trouble, help me!! $uri")
-                    startActivity(intent)
-
-                } else {
-
-//                    14 march pending work is get contacts and send location
+                val alertDialog = AlertDialog.Builder(requireContext())
+                alertDialog.setTitle("Share Location")
+                alertDialog.setMessage("Do you want to share your location to saved contacts?")
+                alertDialog.setPositiveButton("Yes") { _, _ ->
+                    // Handle the positive button click
+                    viewModel.getAllContacts().observe(requireActivity()) { contacts ->
+                        for (contact in contacts) {
+                            getUserLocationsByFused(contact)
+                        }
+                    }
 
                 }
+                alertDialog.setNegativeButton("No") { _, _ ->
+                    // Handle the negative button click
+                    Toast.makeText(context, "No Action Taken", Toast.LENGTH_SHORT).show()
+
+                }
+                alertDialog.show()
+
+
+
+
             }
 
+
         }
-    }
+
+
+
+
 
 
     }
+    fun getUserLocationsByFused(contact: Contact){
+
+        Toast.makeText(requireContext(), "Sending live location to saved contacts!", Toast.LENGTH_SHORT).show()
+
+        // Location Request
+        val locationRequest = LocationRequest.create().apply {
+//        interval = 60 * 1000 // Update interval in milliseconds
+            fastestInterval = 60000 // Fastest update interval in milliseconds
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    // Use the location object to get the latitude and longitude
+                    val latitude = locationResult.lastLocation?.latitude
+                    val longitude = locationResult.lastLocation?.longitude
+                    // Do something with the latitude and longitude
+                    //room db contact send location by number
+                    val recipients = listOf(contact.number)
+                    val messageBodies = listOf("sms_body", "I am in trable please help me " +
+                            "https://www.google.com/maps/?q=${latitude},${longitude}")
+
+
+                    try {
+
+                        val smsManager = SmsManager.getDefault()
+                        for (i in recipients.indices) {
+                            smsManager.sendTextMessage(recipients[i], null, "$messageBodies", null, null)
+                        }
+
+                        Toast.makeText(requireContext(), "Sending message to ${contact.name}", Toast.LENGTH_SHORT).show()
+
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Something went wrong $e",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+
+
+//                Toast.makeText(applicationContext, "Latitude: $latitude, Longitude: $longitude", Toast.LENGTH_LONG).show()
+                }
+            },
+            Looper.getMainLooper()
+        )
+    }
+
+}
+
+
+
+
+
 

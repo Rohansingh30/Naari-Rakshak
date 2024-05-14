@@ -1,6 +1,7 @@
 package com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.Fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
 
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.blogspot.softwareengineerrohan.naarirakshak.R
 
@@ -17,9 +19,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MapsFragment : Fragment() {
 
+    @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
         /**
          * Manipulates the map once available.
@@ -30,9 +38,37 @@ class MapsFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
-        val sydney = LatLng(27.17510, 78.04217)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker on Taj Mahal"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        runBlocking {
+            GlobalScope.launch(Dispatchers.IO) {
+                try {
+
+                    withContext(Dispatchers.Main) {
+                        val sydney = LatLng(27.17510, 78.04217)
+
+                        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker on Taj Mahal"))
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+                        googleMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+                        googleMap.uiSettings.isZoomControlsEnabled = true
+                        googleMap.uiSettings.isCompassEnabled = true
+                        googleMap.uiSettings.isMyLocationButtonEnabled = true
+                        googleMap.uiSettings.isMapToolbarEnabled = true
+                        googleMap.uiSettings.isZoomGesturesEnabled = true
+                        googleMap.uiSettings.isScrollGesturesEnabled = true
+                        googleMap.uiSettings.isRotateGesturesEnabled = true
+                        googleMap.uiSettings.isTiltGesturesEnabled = true
+                        googleMap.uiSettings.isScrollGesturesEnabledDuringRotateOrZoom = true
+
+                        googleMap.isMyLocationEnabled = true
+                    }
+                } catch (e: Exception) {
+                  Toast.makeText(this@MapsFragment.requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+
+
         if (ActivityCompat.checkSelfPermission(
                 this.requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -49,8 +85,12 @@ class MapsFragment : Fragment() {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
 
+            return@OnMapReadyCallback
+
+
+
         }
-        googleMap.isMyLocationEnabled = true
+
     }
 
     override fun onCreateView(

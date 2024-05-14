@@ -1,34 +1,33 @@
 package com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.Fragments
 
+//import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.MenusWork.CreateContactActivity
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.AlertDialog
+import android.app.ProgressDialog
+import android.content.ContextWrapper
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
-import android.media.MediaRecorder.VideoSource
+import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.MediaController
 import android.widget.Toast
-import android.widget.ToggleButton
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-//import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.MenusWork.CreateContactActivity
 import com.blogspot.softwareengineerrohan.naarirakshak.R
 import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.SosActivity.AudioActivity
+import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.SosActivity.CaptureImageActivity
 import com.blogspot.softwareengineerrohan.naarirakshak.Ui.Activities.SosActivity.VideoActivity
 import com.blogspot.softwareengineerrohan.naarirakshak.databinding.FragmentSosBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
+
 
 class SosFragment : Fragment() {
 
@@ -40,6 +39,7 @@ class SosFragment : Fragment() {
 
     private lateinit var cameraManager: CameraManager
     private var isFlashlightOn = false
+    private var mediaRecorder: MediaRecorder? = null
 
 
 
@@ -50,8 +50,9 @@ class SosFragment : Fragment() {
     ): LinearLayout {
         // Inflate the layout for this fragment
 
-        cameraManager = getSystemService(requireContext(), CameraManager::class.java) as CameraManager
          binding = FragmentSosBinding.inflate(inflater, container, false)
+        cameraManager = getSystemService(requireContext(), CameraManager::class.java) as CameraManager
+
         // sos sound work
         mediaPlayer = MediaPlayer.create(context, R.raw.militaryalarm)
         mediaPlayer.setVolume(1f, 1f)
@@ -74,19 +75,36 @@ class SosFragment : Fragment() {
         binding.captureImg.setOnClickListener {
            captureImage()
         }
+        binding.captureImgSaved.setOnClickListener {
+            startActivity(Intent(context, CaptureImageActivity::class.java))
+        }
+//        binding.captureImg.setOnLongClickListener {
+//            true
+//        }
+
         binding.videoRec.setOnClickListener {
         videoRecord()
 
         }
 
+        binding.videoRecSaved.setOnClickListener {
+            startActivity(Intent(context, VideoActivity::class.java))
+        }
+
         binding.audioRec.setOnClickListener {
+            alertDialog()
+        }
+        binding.audSaved.setOnClickListener {
             startActivity(Intent(context, AudioActivity::class.java))
+
         }
 
 
 
         binding.flashlightBtn.setOnClickListener {
             toggleFlashlight()
+
+
         }
 
 
@@ -102,6 +120,55 @@ class SosFragment : Fragment() {
 
     }
 
+
+
+
+
+private fun alertDialog(){
+    val alertDialog = AlertDialog.Builder(requireContext()) //set icon
+        .setIcon(R.drawable.record) //set title
+        .setTitle("Are you sure to Record Audio") //set message
+        .setMessage("Recording Audio") //set positive button
+        .setPositiveButton("Yes") { dialogInterface, i -> //set what would happen when positive button is clicked
+
+
+            startAudio()
+
+//            requireActivity().finish()
+        } //set negative button
+        .setNegativeButton("No") { dialogInterface, i -> //set what should happen when negative button is clicked
+
+          if (mediaRecorder != null){
+              mediaRecorder!!.stop()
+              mediaRecorder!!.release()
+              mediaRecorder = null
+              Toast.makeText(requireContext(), "Recording Stopped", Toast.LENGTH_LONG).show()
+          }
+        }
+        .show()
+
+}
+
+   private fun startAudio() {
+        try {
+            mediaRecorder = MediaRecorder()
+            mediaRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
+            mediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            mediaRecorder!!.setOutputFile(getRecordingFilePath())
+            mediaRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            mediaRecorder!!.prepare()
+            mediaRecorder!!.start()
+            Toast.makeText(requireContext(), "Recording Started", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Recording Failed${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun getRecordingFilePath(): String {
+        val contextWrapper = ContextWrapper(requireContext())
+        val audioFolder = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+        val file = File(audioFolder, "testRecording" + ".mp3")
+        return file.path
+    }
 
 
     private fun toggleFlashlight() {
@@ -120,11 +187,13 @@ class SosFragment : Fragment() {
     }
 
     private fun videoRecord() {
+       //capture video
         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         if (intent.resolveActivity(requireActivity().packageManager) != null) {
-
             startActivity(intent)
+
         }
+
 
     }
 

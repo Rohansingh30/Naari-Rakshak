@@ -82,7 +82,7 @@
             <ImageView
                 android:id="@+id/tvUpdateBtn"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="50dp"
                 android:clickable="true"
                 android:contextClickable="true"
                 app:srcCompat="@drawable/baseline_share_location_24" />

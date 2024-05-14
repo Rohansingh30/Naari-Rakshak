@@ -47,28 +47,46 @@
                         android:layout_width="wrap_content"
                         android:layout_height="80dp">
 
-                        <LinearLayout
-                            android:id="@+id/video_rec"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:onClick="startRecording"
-                            android:orientation="vertical">
+                            android:onClick="startRecording">
 
                             <ImageView
+                                android:id="@+id/video_rec_saved"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/list_text"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#009688" />
+
+                            <ImageView
+                                android:id="@+id/video_rec"
+
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:layout_gravity="center"
+                                app:layout_constraintBottom_toTopOf="@+id/textView21"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.5"
                                 app:srcCompat="@drawable/recbutton"
                                 tools:ignore="DuplicateIds" />
 
                             <TextView
+                                android:id="@+id/textView21"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Video recording"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
                                 tools:ignore="DuplicateIds" />
-                        </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.cardview.widget.CardView>
 
@@ -77,28 +95,44 @@
                         android:layout_height="80dp"
                         android:layout_marginLeft="10dp">
 
-                        <LinearLayout
-                            android:id="@+id/audio_rec"
-                            android:layout_width="match_parent"
+                        <androidx.constraintlayout.widget.ConstraintLayout
 
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:layout_margin="5dp">
 
                             <ImageView
-                                android:id="@+id/imageView3"
-                                android:layout_width="33dp"
-                                android:layout_height="29dp"
-                                android:layout_gravity="center"
-                                app:srcCompat="@drawable/voice" />
+                                android:id="@+id/aud_saved"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/list_text"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#009688" />
+
+                            <ImageView
+                                android:id="@+id/audio_rec"
+
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                app:layout_constraintBottom_toTopOf="@+id/textView17"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.5"
+                                app:srcCompat="@android:drawable/presence_audio_busy" />
 
                             <TextView
                                 android:id="@+id/textView17"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Audio recording " />
-                        </LinearLayout>
+                                android:text="Audio recording "
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                     </androidx.cardview.widget.CardView>
@@ -108,26 +142,45 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp">
 
-                        <LinearLayout
-                            android:id="@+id/capture_img"
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
                             android:layout_height="70sp"
-                            android:layout_margin="5dp"
-                            android:gravity="center"
-                            android:orientation="vertical">
+
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp">
 
                             <ImageView
+                                android:id="@+id/capture_img"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:layout_gravity="center"
-                                android:tint="#FF0000"
-                                app:srcCompat="@android:drawable/ic_menu_camera" />
+                                app:layout_constraintBottom_toTopOf="@+id/textView20"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.5"
+                                app:srcCompat="@android:drawable/ic_menu_camera"
+                                app:tint="#D10606" />
 
                             <TextView
+                                android:id="@+id/textView20"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Capture Image" />
-                        </LinearLayout>
+                                android:text="Capture Image"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/capture_img_saved"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/list_text"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#009688" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 
 

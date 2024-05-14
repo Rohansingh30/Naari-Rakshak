@@ -17,11 +17,11 @@ android:icon="@drawable/baseline_home_24"
 
 
     <item
-        android:id="@+id/headerInvite"
+        android:id="@+id/header_Invite"
         android:icon="@drawable/police_icon"
         android:title="Invite Fragment"/>
     <item
-        android:icon="@drawable/baseline_settings_24"
+        android:icon="@drawable/baseline_exit_to_app_24"
         android:id="@+id/headerSignOut"
         android:title="SignOut " />
 
@@ -35,7 +35,7 @@ android:icon="@drawable/baseline_home_24"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <item
-                android:id="@+id/header_setting"
+                android:id="@+id/header_profile"
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
@@ -49,14 +49,16 @@ android:icon="@drawable/baseline_home_24"
         <menu
           >
             <item
-                android:id="@+id/ownerDetails"
+                android:id="@+id/header_owner_Details"
 android:icon="@drawable/baseline_person_pin_24"
-                android:title="App Owner Details" />
+                android:title="App Details" />
 
             <item
+                android:id="@+id/header_share"
                 android:icon="@drawable/baseline_person_pin_24"
                 android:title="Share" />
             <item
+                android:id="@+id/header_FAQs"
                 android:icon="@drawable/baseline_person_pin_24"
                 android:title="FAQs" />
 

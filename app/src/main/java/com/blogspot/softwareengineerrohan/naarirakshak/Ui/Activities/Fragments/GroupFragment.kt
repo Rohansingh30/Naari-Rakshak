@@ -117,14 +117,21 @@ class GroupFragment : Fragment(),  ContactAdapter.OnItemClickListener {
                     for (location in locationResult.locations) {
 
                             try {
-                                val intent = Intent(Intent.ACTION_SENDTO)
-                        intent.data = Uri.parse("smsto:${contact.number}")
-                        intent.putExtra("sms_body", "I am in trable please help me " +
-                                "https://www.google.com/maps/?q=${location.latitude},${location.longitude}")
-                        startActivity(intent)
+//                                val intent = Intent(Intent.ACTION_SENDTO)
+//                        intent.data = Uri.parse("smsto:${contact.number}")
+//                        intent.putExtra("sms_body", "I am in trable please help me " +
+//                                "https://www.google.com/maps/?q=${location.latitude},${location.longitude}")
+//                        startActivity(intent)
+                                val recipients = listOf(contact.number)
+                                val messageBodies = listOf("sms_body", "I am in trable please help me " +
+                                        "https://www.google.com/maps/?q=${location.latitude},${location.longitude}")
 
+                                val smsManager = SmsManager.getDefault()
+                                for (i in recipients.indices) {
+                                    smsManager.sendTextMessage(recipients[i], null, "$messageBodies", null, null)
+                                }
 
-                        Toast.makeText(requireContext(), "Sending message to ${contact.name}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Sending message to ${contact.name}", Toast.LENGTH_SHORT).show()
 
                             } catch (e: Exception) {
                             Toast.makeText(

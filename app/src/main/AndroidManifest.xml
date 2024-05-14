@@ -9,6 +9,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
@@ -32,7 +33,6 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
-
     <application
         android:name=".SharedPreferernences.NaariRakshakApplication"
         android:allowBackup="true"
@@ -43,7 +43,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NaariRakshak"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Ui.Activities.AppScreenInfo.AppInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Ui.Activities.SosActivity.CaptureImageActivity"
+            android:exported="false" />
         <activity
             android:name=".Ui.Activities.SosActivity.AudioActivity"
             android:exported="false" />
@@ -52,12 +59,6 @@
             android:exported="false" />
         <activity
             android:name=".Ui.Activities.roomcontactactivity.AddContactActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Ui.Activities.MenusWork.CreateContactActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SosMenu.Activitys.RegisterNumberActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivities.SignUpActivity"
@@ -79,6 +80,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".Ui.Activities.activity.SafeTutoialActivity"
