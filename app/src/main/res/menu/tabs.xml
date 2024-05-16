@@ -29,7 +29,7 @@ android:id="@+id/location"
 
         android:layout_height="wrap_content"
         android:enabled="true"
-        android:icon="@drawable/baseline_contactless_24"
+        android:icon="@drawable/sparklerr"
 
         android:title="Ai" />
 

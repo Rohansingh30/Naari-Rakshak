@@ -58,14 +58,16 @@
                 android:id="@+id/fabSosBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="24dp"
                 android:clickable="true"
+                android:focusable="true"
 
                 app:backgroundTint="@color/red"
                 app:layout_constraintBottom_toBottomOf="@+id/bottomBar"
                 app:layout_constraintEnd_toEndOf="@+id/bottomBar"
                 app:layout_constraintStart_toStartOf="@+id/bottomBar"
                 app:layout_constraintTop_toTopOf="@+id/bottomBar"
+                app:shapeAppearanceOverlay="@style/fab_3_rounded"
                 app:srcCompat="@drawable/baseline_sos_243" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

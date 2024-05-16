@@ -7,16 +7,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.telephony.SmsManager
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.blogspot.softwareengineerrohan.naarirakshak.Adapters.FragmentsAdapters.fragmentsAdapters.RcvCaptureImgAdapter
 import com.blogspot.softwareengineerrohan.naarirakshak.Models.FragmentsModels.fragmnetsmodels.RcvCaptureImgModel
 import com.blogspot.softwareengineerrohan.naarirakshak.databinding.ActivityCaptureImageBinding
+import com.blogspot.softwareengineerrohan.naarirakshak.roomDb.Contact
+import com.blogspot.softwareengineerrohan.naarirakshak.roomDb.ContactViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.storage
 
 class CaptureImageActivity : AppCompatActivity() {
@@ -26,10 +32,17 @@ class CaptureImageActivity : AppCompatActivity() {
     }
     private lateinit var progressDialog: ProgressDialog
 
+    private lateinit var auth : FirebaseAuth
+    val viewModel: ContactViewModel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        auth = FirebaseAuth.getInstance()
+
 
         progressDialog = ProgressDialog(this)
 
@@ -45,24 +58,33 @@ class CaptureImageActivity : AppCompatActivity() {
 
 
 
+
     }
+
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun getImagesFromFirebaseCloudStorage() {
 //This show image in recyclerview from firebase cloud storage
         binding.rcvCaptureImgFbdb.adapter?.notifyDataSetChanged()
 
-        Firebase.database.reference.child("Photo").get().addOnSuccessListener {
+
+        Toast.makeText(this, "data loading", Toast.LENGTH_SHORT).show()
+        Firebase.database.reference.child("Photo/").get().addOnSuccessListener {
             val list = mutableListOf<RcvCaptureImgModel>()
             for (i in it.children) {
                 val img = i.value.toString()
                 list.add(RcvCaptureImgModel(img))
+
             }
+
+
 
             binding.rcvCaptureImgFbdb.layoutManager = GridLayoutManager(this, 3)
             binding.rcvCaptureImgFbdb.adapter = RcvCaptureImgAdapter(this, list)
             binding.rcvCaptureImgFbdb.adapter?.notifyDataSetChanged()
         }
+
 
         }
 
@@ -92,34 +114,42 @@ class CaptureImageActivity : AppCompatActivity() {
                     progressDialog.setTitle("Uploading...")
                     progressDialog.show()
 
-                    val ref = Firebase.storage.reference.child(
-                        "Photo/" + System.currentTimeMillis() + "." + getFilesType(it.data?.data!!)
-                    )
-                    ref.putFile(it.data?.data!!).addOnSuccessListener {
+                    //upload image to firebase cloud storage
 
-                        ref.downloadUrl.addOnSuccessListener {
+                        val ref = Firebase.storage.reference.child(
+                            "Photo/" + System.currentTimeMillis() + "." + getFilesType(it.data?.data!!)
+                        )
+                        ref.putFile(it.data?.data!!)
+                            .addOnSuccessListener {
 
-                            //load image by piccaso
-                            Firebase.database.reference.child("Photo").push().setValue(it.toString())
-                            Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                            progressDialog.dismiss()
+                                ref.downloadUrl.addOnSuccessListener {
 
-//It show imag e in recyclerview but not working
+                                    //load image by piccaso
+                                    Firebase.database.reference.child("Photo").push().setValue(it.toString())
+                                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                                    progressDialog.dismiss()
 
-//                            binding.rcvCaptureImgFbdb.adapter = RcvCaptureImgAdapter(this, listOf(RcvCaptureImgModel(it.toString())))
-//                            binding.rcvCaptureImgFbdb.layoutManager = GridLayoutManager(this, 3)
-//
+                                }
+                            }
+                            .addOnProgressListener {
+                                val progress = (100.0 * it.bytesTransferred) / it.totalByteCount
+                                progressDialog.setMessage("Uploaded ${progress.toInt()}%")
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                            }
 
 
-                        }
-                    }
-                        .addOnProgressListener {
-                            val progress = (100.0 * it.bytesTransferred) / it.totalByteCount
-                            progressDialog.setMessage("Uploaded ${progress.toInt()}%")
-                        }
+
+
+
+
                 }
             }
 
 
         }
+
+
+
 }

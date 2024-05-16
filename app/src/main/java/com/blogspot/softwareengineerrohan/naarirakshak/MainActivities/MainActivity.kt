@@ -4,6 +4,7 @@ import android.Manifest
 import android.R.id.message
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -13,9 +14,12 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -26,6 +30,7 @@ import android.view.GestureDetector
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -33,8 +38,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.blogspot.softwareengineerrohan.naarirakshak.Models.FragmentsModels.fragmnetsmodels.RcvCaptureImgModel
 import com.blogspot.softwareengineerrohan.naarirakshak.R
 import com.blogspot.softwareengineerrohan.naarirakshak.SharedPreferernences.PrefConstants
 import com.blogspot.softwareengineerrohan.naarirakshak.SharedPreferernences.SharedPref
@@ -57,8 +64,13 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.play.integrity.internal.i
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
+import java.io.File
 import java.net.URLEncoder
 import java.util.Objects
 
@@ -70,6 +82,12 @@ class MainActivity : AppCompatActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
+
+
+
+
+    private var mediaRecorder: MediaRecorder? = null
+    private val PERMISSION_CODE = 11
 
     //for media player shake feature
     lateinit var mediaPlayer: MediaPlayer
@@ -170,7 +188,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabSosBtn.setOnClickListener {
 
-            replaceFragment(SosFragment())
+Toast.makeText(this, "long press for emergency situation", Toast.LENGTH_SHORT).show()
+//            replaceFragment(SosFragment())
             // Handle single click event
 
             // Pass the touch event to the GestureDetector
@@ -282,6 +301,11 @@ signouts()
 
         registerListener()
 
+
+
+
+
+
     }
 
 
@@ -367,7 +391,7 @@ signouts()
             vibrator.vibrate(VibrationEffect.createOneShot(5000, 10))
 
             Toast.makeText(applicationContext, "Emergency System Activated", Toast.LENGTH_SHORT).show()
-
+//audioSend()
             mediaPlayer.start()
             viewModel.getAllContacts().observe(this) { contacts ->
                 for (contact in contacts) {
@@ -389,7 +413,17 @@ signouts()
             }
 
         }
+
+//********audio send function
+//        if (isMicrophoneAvailable()) {
+//            getMicrophonePermission()
+//        }
+
+//********audio send function
+
     }
+
+
 
 
 fun getUserLocationsByFused(contact: Contact){
@@ -398,7 +432,7 @@ fun getUserLocationsByFused(contact: Contact){
     // Location Request
     val locationRequest = LocationRequest.create().apply {
 //        interval = 60 * 1000 // Update interval in milliseconds
-        fastestInterval = 60000 // Fastest update interval in milliseconds
+        fastestInterval =  5 * 60 * 1000 // Fastest update interval in milliseconds
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
@@ -478,7 +512,9 @@ fun getUserLocationsByFused(contact: Contact){
         // unregister listener
 
         sensorManager!!.unregisterListener(sensorListener)
-        mediaPlayer.pause()
+        mediaPlayer.stop()
+
+//        stopAudio()
 
     }
 //private val locationSendByShake: BroadcastReceiver = object : BroadcastReceiver() {
@@ -490,23 +526,158 @@ fun getUserLocationsByFused(contact: Contact){
 //    }
 //}
 
+
+//*****************
+    //audio send function
+private val handler = Handler()
+
+    fun scheduleDelayedTask() {
+        handler.postDelayed({
+            // Perform your task here
+            startAudio()
+            Toast.makeText(this, "Sending audio", Toast.LENGTH_SHORT).show()
+
+
+        }, 5 * 60 * 1000 )
+    }
+
+    private fun audioSend(){
+        startAudio()
+
+        scheduleDelayedTask()
+
+
+
+    uploadAud()
+
+
+    }
+
+    private fun isMicrophoneAvailable(): Boolean {
+        if (this.packageManager.hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
+
+            return true
+        } else {
+
+            return false
+        }
+    }
+   private fun startAudio() {
+        try {
+            mediaRecorder = MediaRecorder()
+            mediaRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
+            mediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            mediaRecorder!!.setOutputFile(getRecordingFilePath())
+            mediaRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            mediaRecorder!!.prepare()
+            mediaRecorder!!.start()
+            Toast.makeText(this, "Recording Started", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Recording Failed${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+   private fun stopAudio() {
+        try {
+            mediaRecorder!!.stop()
+            mediaRecorder!!.release()
+            mediaRecorder = null
+            Toast.makeText(this, "Recording Stopped", Toast.LENGTH_SHORT).show()
+
+        } catch (e: Exception) {
+            Toast.makeText(this, "Recording Failed${e.message}", Toast.LENGTH_SHORT).show()
+        }
+
+
+
+
+    }
+   private fun playAudio() {
+
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer()
+        }
+        try {
+            mediaPlayer!!.setDataSource(getRecordingFilePath())
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+            Toast.makeText(this, "Playing Recording", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
+    }
+
+    private fun uploadAud(){
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val storageRef = Firebase.storage.reference.child("audio/$userId")
+        val audioRef = storageRef.child("my_audio.mp3")
+        val audioFileUri = Uri.fromFile(File(getRecordingFilePath()))
+        val uploadTask = audioRef.putFile(audioFileUri)
+
+// Register observers to listen for the upload status
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+        Toast.makeText(this, "Audio Uploading Failed", Toast.LENGTH_SHORT).show()
+
+        }.addOnSuccessListener {
+
+            // Handle successful uploads
+            Toast.makeText(this, "Audio Uploaded", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun getRecordingFilePath(): String {
+        val contextWrapper = ContextWrapper(applicationContext)
+        val audioFolder = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+        val file = File(audioFolder, "testRecording" + ".mp3")
+        return file.path
+    }
+    private fun getMicrophonePermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_DENIED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                PERMISSION_CODE
+            )
+        }
+    }
+//****************
+
+
+
     private fun signouts() {
+
+
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            FirebaseAuth.getInstance().signOut()
+
+        }else{
+
 //        Toast.makeText(applicationContext, "User Signed Out", Toast.LENGTH_SHORT).show()
 //        // dekhna remove krke kya change aya smj ni ara ok nxt time see
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        val go = GoogleSignIn.getClient(this, gso)
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            val go = GoogleSignIn.getClient(this, gso)
 
 
 
-        SharedPref.putBoolean(PrefConstants.IS_USER_LOGGED_IN, false)
-        go.signOut()
+            SharedPref.putBoolean(PrefConstants.IS_USER_LOGGED_IN, false)
+            go.signOut()
 //        FirebaseAuth.getInstance().signOut()
-        startActivity(Intent(this, LoginActivity::class.java))
-        Toast.makeText(applicationContext, "User Signed Out", Toast.LENGTH_SHORT).show()
-        finish()
+            startActivity(Intent(this, LoginActivity::class.java))
+            Toast.makeText(applicationContext, "User Signed Out", Toast.LENGTH_SHORT).show()
+            finish()
+
+        }
+
 
     }
 

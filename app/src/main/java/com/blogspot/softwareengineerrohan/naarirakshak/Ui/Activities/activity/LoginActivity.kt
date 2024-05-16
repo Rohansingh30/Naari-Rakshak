@@ -43,6 +43,15 @@ binding.googleLoginBtn.setOnClickListener {
     val signInIntent = googleSignInClient.signInIntent
     startActivityForResult(signInIntent, RC_SIGN_IN)
 }
+        if (SharedPref.getBoolean(PrefConstants.IS_USER_LOGGED_IN)) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
+
+
         binding.loginBtn.setOnClickListener {
             val email = binding.etEmailLogin.text.toString()
             val pass = binding.etPasswordLogin.text.toString()
@@ -50,12 +59,18 @@ binding.googleLoginBtn.setOnClickListener {
             if (email.isNotEmpty() && pass.isNotEmpty()) {
                 firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
+
+                        Toast.makeText(this, "Login Success", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
-                    } else {
-                        Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show()
+                        SharedPref.putBoolean(PrefConstants.IS_USER_LOGGED_IN,true)
+
+                    }
+                    else{
+                        Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
+
+
                     }
                 }
             } else {
@@ -65,7 +80,11 @@ binding.googleLoginBtn.setOnClickListener {
 
 
 
+
+
         }
+
+
         binding.signupBtn.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)

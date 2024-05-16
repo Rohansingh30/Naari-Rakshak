@@ -26,6 +26,9 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class GroupFragment : Fragment(),  ContactAdapter.OnItemClickListener {
@@ -70,7 +73,6 @@ class GroupFragment : Fragment(),  ContactAdapter.OnItemClickListener {
     override fun deleteContact(contact: Contact) {
         viewModel.deleteContact(contact)
         Toast.makeText(requireContext(), "Contact deleted", Toast.LENGTH_SHORT).show()
-
 
     }
 

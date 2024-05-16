@@ -69,12 +69,12 @@
             android:textColor="#E3E0E0" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="#4CAF50"
-            android:text="App Owner Details" />
+            android:text="App Owner Info" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

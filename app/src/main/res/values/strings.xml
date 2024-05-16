@@ -14,6 +14,24 @@
 
     <string name="open">Open\n</string>
     <string name="close">Close\n</string>
+
+
+    <string name="appOwner">
+       \t\t\t\t\t\t\t\t\t\t\t\t <b>Name : Rohan Singh</b>
+        \n\t\t\t\t\t\t\t\t\t\t\t <b>Role : Android Developer</b>
+        \n\t\t\t\t\t<b>Contact us : rohansingh302623@gmail.com</b>
+\n\nRohan Singh is a dedicated Android Developer with a passion for creating impactful applications. Currently studying at FET Agra College in Btech 4th Year, Rohan\'s innovative spirit led him to develop the Naari Rakshak App, a mobile application designed to empower and protect women. With expertise in Android development, Rohan combines his technical skills with a deep understanding of user needs to create intuitive and effective solutions. His commitment to leveraging technology for social good drives his work, making him a valuable asset in the tech community.
+        \n\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<b>Thank you : Rohan Singh</b>
+
+
+
+
+
+</string>
+
+    
+    
+    
     <string name="tips2">
         <b>
         \t How can I stay safe late at night? </b>\n

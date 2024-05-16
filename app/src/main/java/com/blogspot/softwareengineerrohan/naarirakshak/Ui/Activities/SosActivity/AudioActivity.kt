@@ -47,20 +47,7 @@ class AudioActivity : AppCompatActivity() {
         getAud()
 
     }
-    fun startAudio(view: View) {
-        try {
-            mediaRecorder = MediaRecorder()
-            mediaRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
-            mediaRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            mediaRecorder!!.setOutputFile(getRecordingFilePath())
-            mediaRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            mediaRecorder!!.prepare()
-            mediaRecorder!!.start()
-            Toast.makeText(this, "Recording Started", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            Toast.makeText(this, "Recording Failed${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
+
 
     fun stopAudio(view: View) {
         try {
@@ -149,12 +136,12 @@ storageRef.listAll().addOnSuccessListener { listResult ->
         }
     }
 
+
     private fun getRecordingFilePath(): String {
         val contextWrapper = ContextWrapper(applicationContext)
         val audioFolder = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
         val file = File(audioFolder, "testRecording" + ".mp3")
         return file.path
     }
-
 
 }
