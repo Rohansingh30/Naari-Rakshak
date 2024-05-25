@@ -50,8 +50,6 @@ binding.googleLoginBtn.setOnClickListener {
         }
 
 
-
-
         binding.loginBtn.setOnClickListener {
             val email = binding.etEmailLogin.text.toString()
             val pass = binding.etPasswordLogin.text.toString()
@@ -77,10 +75,6 @@ binding.googleLoginBtn.setOnClickListener {
                 Toast.makeText(this, "Empty Fields Are Not Allowed !!", Toast.LENGTH_SHORT).show()
 
             }
-
-
-
-
 
         }
 
@@ -111,7 +105,6 @@ binding.googleLoginBtn.setOnClickListener {
 
     }
 
-
     private fun firebaseAuthWithGoogle(idToken: String) {
         val auth = FirebaseAuth.getInstance()
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -133,14 +126,9 @@ binding.googleLoginBtn.setOnClickListener {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(this, "Sign in failed", Toast.LENGTH_SHORT).show()
 
-
                 }
             }
 
     }
-
-
-
-
 }
 
